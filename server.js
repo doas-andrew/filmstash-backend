@@ -5,10 +5,10 @@ const logger = require('./middleware/logger');
 const cors = require('cors');
 const config = require('./config');
 
+console.log(config.MONGO);
 
 const startServer = client => {
 	app.listen(config.PORT, ()=> console.log(`Server started on port ${config.PORT}`));
-	console.log('Allowing requests from: ', config.CORS.origin);
 	app.locals.users = client.db('FlixNet').collection('users');
 }
 
