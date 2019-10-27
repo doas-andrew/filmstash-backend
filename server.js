@@ -8,6 +8,7 @@ const config = require('./config');
 
 const startServer = client => {
 	app.listen(config.PORT, ()=> console.log(`Server started on port ${config.PORT}`));
+	console.log('Allowing requests from: ', config.CORS.origin);
 	app.locals.users = client.db('FlixNet').collection('users');
 }
 
