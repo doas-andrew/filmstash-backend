@@ -2,10 +2,11 @@ const jwt = require('../auth/jwt_auth');
 const ObjectId = require('mongodb').ObjectId;
 
 const new_entry_params = params => ({
-	title: params.title,
+	title: params.title || '',
 	overview: params.overview || '',
 	poster_path: params.poster_path || '',
-	score: params.score || 0,
+	score: params.score || '0',
+	genre_ids: params.genre_ids || [],
 	notes: ''
 });
 
