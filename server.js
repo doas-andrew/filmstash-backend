@@ -6,12 +6,6 @@ const cors = require('cors');
 const config = require('./config');
 
 
-const startServer = client => {
-	app.listen(config.PORT, ()=> console.log(`Server started on port ${config.PORT}`));
-	app.locals.users = client.db('FlixNet').collection('users');
-}
-
-
 // Initialize application
 const app = express();
 
@@ -20,19 +14,20 @@ const app = express();
 app.use(logger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors(config.CORS));
 
 
 // Routes
 app.get('/', (req, res) => res.json({ message: 'This API uses Express.js and MongoDB Atlas. See the code at: https://github.com/ASAllen67/flixnet-backend-express-mongodb' }));
-app.use('/users', require('./controllers/users_controller'));
-app.use('/entries', require('./controllers/entries_controller'));
-app.use('/sessions', require('./controllers/sessions_controller'));
+app.use('/users', cors(config.CORS), require('./controllers/users_controller'));
+app.use('/entries', cors(config.CORS), require('./controllers/entries_controller'));
+app.use('/sessions', cors(config.CORS), require('./controllers/sessions_controller'));
 
 
 // Connect to MongoDB
 MongoClient
-	.connect(...config.MONGO)
-	.then(startServer)
-	.catch(console.error);
-
+.connect(...config.MONGO)
+.catch(console.error)
+.then(client => {
+	app.listen(config.PORT, () => console.log(`Server started on port ${config.PORT}`));
+	app.locals.users = client.db('FlixNet').collection('users');
+});

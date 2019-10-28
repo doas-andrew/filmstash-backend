@@ -57,7 +57,6 @@ const serialize = user => ({
 });
 
 module.exports = {
-	validate,
 	create,
 	serialize
 };

@@ -7,6 +7,7 @@ const jwt = require('../auth/jwt_auth');
 const show = (req, res) => {
 	jwt.authorize(req, res)
 	.then(user => res.status(200).json({ user: User.serialize(user) }))
+	.catch(error => res.status(401).json({ error }));
 };
 
 const create = (req, res) => {

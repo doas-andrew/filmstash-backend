@@ -9,7 +9,7 @@ const MONGO = [cluster_uri, mongo_options]; // use spread operator to list these
 
 const CORS = {
   origin: process.env.FRONTEND_ORIGIN,
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  methods: 'GET,POST,PATCH,DELETE',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 

@@ -17,8 +17,7 @@ const authorize = async (req, res) => {
 	if (current_user)
 		return current_user;
 	else
-		res.status(401).json({ error: 'Bad token. Please log in.' });
-		// throw 'Bad token. Please log in.';
+		throw 'Bad token. Please log in.';
 };
 
 // Gets current user's ID from token without making a query for the full user object
