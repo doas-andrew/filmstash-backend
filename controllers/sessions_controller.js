@@ -23,16 +23,11 @@ const create = async (req, res) => {
 const search = (req, res) => {
 	jwt.authorize(req, res)
 	.then(() => {
-		const url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_KEY}&query=${req.query.query}&language=en-US&page=${req.query.pageNum}&include_adult=false`;
+		const url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_KEY}&query=${req.query.query || ''}&language=en-US&page=${req.query.pageNum || 1}&include_adult=false`;
 		axios.get(url)
 		.then(tmdb_res => res.status(200).send(tmdb_res.data))
 		.catch(error => res.status(400).json({ error }));
 	})
-
-	// const url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_KEY}&query=${req.query.query}&language=en-US&page=${req.query.pageNum}&include_adult=false`;
-	// axios.get(url)
-	// .then(tmdb_res => res.status(200).send(tmdb_res.data))
-	// .catch(error => res.status(400).json({ error }));
 };
 
 

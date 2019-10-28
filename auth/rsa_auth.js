@@ -4,12 +4,12 @@ const key  = new NodeRSA(process.env.PRIVATE_KEY);
 
 const encrypt = plaintext => {
  try { return lock.encrypt(plaintext, 'base64'); }
- catch { return '' }
+ catch { return ''; }
 }
 
 const decrypt = encrypted => {
  try { return key.decrypt(encrypted, 'utf8'); }
- catch { return '' }
+ catch { return ''; }
 }
 
 const authenticate = (a, b) => decrypt(a) === decrypt(b);
