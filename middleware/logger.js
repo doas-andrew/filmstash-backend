@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
 	('0' + d.getUTCMinutes()).slice(-2) + ':' + 
 	('0' + d.getUTCSeconds()).slice(-2) + ' UTC]';
 
-	const message = `${timestamp} ${req.method} ${req.originalUrl}`;
+	const message = `${timestamp} ${req.method} ${req.originalUrl} from ${req.ip}`;
 	console.log(message);
 	next();
 }
