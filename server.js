@@ -14,13 +14,14 @@ const app = express();
 // app.use(logger); // Disable for deployment - Heroku has its own logger
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors(config.CORS));
 
 
 // Routes
 app.get('/', (req, res) => res.status(200).json({ message: 'This API uses Express.js and MongoDB Atlas. See the code at: https://github.com/ASAllen67/flixnet-backend-express-mongodb' }));
-app.use('/users', cors(config.CORS), require('./controllers/users_controller'));
-app.use('/entries', cors(config.CORS), require('./controllers/entries_controller'));
-app.use('/sessions', cors(config.CORS), require('./controllers/sessions_controller'));
+app.use('/users', require('./controllers/users_controller'));
+app.use('/entries', require('./controllers/entries_controller'));
+app.use('/sessions', require('./controllers/sessions_controller'));
 
 
 // Connect to MongoDB
