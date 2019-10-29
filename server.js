@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
-const logger = require('./middleware/logger'); // Disable for deployment - Heroku has its own logger
+// const logger = require('./middleware/logger'); // Disable for deployment - Heroku has its own logger
 const cors = require('cors');
 const config = require('./config');
 
@@ -11,7 +11,7 @@ const app = express();
 
 
 // Middleware
-app.use(logger); // Disable for deployment - Heroku has its own logger
+// app.use(logger); // Disable for deployment - Heroku has its own logger
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
