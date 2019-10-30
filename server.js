@@ -12,9 +12,9 @@ const app = express();
 
 // Middleware
 // app.use(logger); // Disable for deployment - Heroku has its own logger
+app.use(cors(config.CORS));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors(config.CORS));
 
 
 // Routes
