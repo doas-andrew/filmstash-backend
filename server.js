@@ -1,34 +1,30 @@
 require('dotenv').config();
-const express = require('express');
-const MongoClient = require('mongodb').MongoClient;
-// const logger = require('./middleware/logger'); // Disable for deployment - Heroku has its own logger
 const cors = require('cors');
+const express = require('express');
+const { MongoClient } = require('mongodb');
+const logger = require('./middleware/logger');
 const config = require('./config');
-
 
 // Initialize application
 const app = express();
 
-
 // Middleware
-// app.use(logger); // Disable for deployment - Heroku has its own logger
+if (process.env.APP_ENVIRONMENT === 'development') app.use(logger);
 app.use(cors(config.CORS));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-
 // Routes
-app.get('/', (req, res) => res.status(200).json({ message: 'This API uses Express.js and MongoDB Atlas. See the code at: https://github.com/ASAllen67/flixnet-backend-express-mongodb' }));
+app.get('/', (_, res) => res.status(200).json({ready: true}));
 app.use('/users', require('./controllers/users_controller'));
 app.use('/entries', require('./controllers/entries_controller'));
 app.use('/sessions', require('./controllers/sessions_controller'));
 
-
 // Connect to MongoDB
 MongoClient
-.connect(...config.MONGO)
+.connect(...config.MongoClient)
 .catch(console.error)
 .then(client => {
-	app.listen(config.PORT, () => console.log(`Server started on port ${config.PORT}`));
-	app.locals.users = client.db('FlixNet').collection('users');
+	app.locals.users = client.db(process.env.MONGODB_DATABASE).collection(process.env.MONGODB_COLLECTION);
+	app.listen(process.env.PORT, () => console.log(`Server started on port ${process.env.PORT}`));
 });

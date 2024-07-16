@@ -1,13 +1,11 @@
 module.exports = (req, res, next) => {
-	const d = new Date();
-	const timestamp = '[' + d.getFullYear() + '-' +
-	('0' + (d.getUTCMonth()+1)).slice(-2) + '-' +
-	('0' + d.getUTCDate()).slice(-2) + ' | ' +
-	('0' + d.getUTCHours()).slice(-2) + ':' +
-	('0' + d.getUTCMinutes()).slice(-2) + ':' + 
-	('0' + d.getUTCSeconds()).slice(-2) + ' UTC]';
-
-	const message = `${timestamp} ${req.method} ${req.originalUrl} from ${req.hostname}`;
-	console.log(message);
+	const date = new Date();
+	const timestamp = '[' + date.getFullYear() + '-' +
+	('0' + (date.getUTCMonth()+1)).slice(-2) + '-' +
+	('0' + date.getUTCDate()).slice(-2) + ' | ' +
+	('0' + date.getUTCHours()).slice(-2) + ':' +
+	('0' + date.getUTCMinutes()).slice(-2) + ':' + 
+	('0' + date.getUTCSeconds()).slice(-2) + ' UTC]';
+	console.log(`${timestamp} ${req.method} ${req.originalUrl} from ${req.hostname}`);
 	next();
 }

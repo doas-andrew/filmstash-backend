@@ -1,8 +1,7 @@
 const rsa = require('../auth/rsa_auth');
 const USERNAME_REGEX = /^[a-zA-Z0-9_]*$/;
 
-
-const validate = async (user, collection=false) => {
+async function validate(user, collection=false) {
 	let errors = [];
 
 	if (user.username.match(USERNAME_REGEX) === null)
@@ -24,11 +23,12 @@ const validate = async (user, collection=false) => {
 		user.password = rsa.encrypt(user.password);
 		delete user.confirm_password;
 		return user;
+	} else {
+		throw errors;
 	}
-	else throw errors;
-};
+}
 
-const new_user_params = params => {
+function userParams(params) {
 	const username = rsa.decrypt(params.username);
 	return {
 		username: username,
@@ -39,24 +39,31 @@ const new_user_params = params => {
 
 		completed: {},
 		backlog: {},
-		favorites: {}
+		favorites: {},
 	};
-};
+}
 
-const create = req => {
-	const users_collection = req.app.locals.users;
-	const newUser = new_user_params(req.body);
-	return validate(newUser, users_collection).then(user => users_collection.insertOne(newUser));
-};
+function create(req) {
+	const collection = req.app.locals.users;
+	const user = userParams(req.body);
+	return validate(user, collection)
+	.then(() => collection.insertOne(user))
+	.then(mongoRes => {
+		user._id = mongoRes.insertedId;
+		return user;
+	})
+}
 
-const serialize = user => ({
-	username: user.username,
-	completed: user.completed,
-	backlog: user.backlog,
-	favorites: user.favorites
-});
+function serialize(user) {
+	return {
+		username: user.username,
+		completed: user.completed,
+		backlog: user.backlog,
+		favorites: user.favorites,
+	}
+}
 
 module.exports = {
 	create,
-	serialize
+	serialize,
 };

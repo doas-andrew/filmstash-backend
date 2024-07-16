@@ -1,26 +1,27 @@
-const express = require('express');
-const router = express.Router();
+const router = module.exports = require('express').Router();
 const Entry = require('../models/entry');
 const jwt = require('../auth/jwt_auth');
 
-
-const create = (req, res) => {
-	Entry.create(req, res);
-};
-
-const update = (req, res) => {
-	jwt.authorize(req, res)
-	.then(user => Entry.update(user, req, res))
+function create(req, res) {
+	jwt.getUserId(req)
+	.then(uid => Entry.create(uid, req, res))
 	.catch(error => res.status(401).json({ error }));
-};
+}
 
-const destroy = (req, res) => {
-	Entry.destroy(req, res);
-};
+function destroy(req, res) {
+	jwt.getUserId(req)
+	.then(uid => Entry.destroy(uid, req, res))
+	.catch(error => res.status(401).json({ error }));
+}
 
+function mergeType(fn, str) {
+	return (req, res) => {
+		req.params.type = str
+		fn(req, res)
+	}
+}
 
-router.post('/:type', create);
-router.patch('/:type/:tmdb_id', update);
-router.delete('/:type/:tmdb_id', destroy);
-
-module.exports = router;
+['completed', 'backlog', 'favorites'].forEach(type => {
+	router.post(`/${type}`, mergeType(create, type));
+	router.delete(`/${type}/:id`, mergeType(destroy, type));
+});
